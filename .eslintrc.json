@@ -10,6 +10,7 @@
     "ecmaVersion": 12
   },
   "rules": {
-    "quotes": ["error", "single"]
+    "quotes": ["error", "single"],
+    "no-unused-vars": "warn"
   }
 }
