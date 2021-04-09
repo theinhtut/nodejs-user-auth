@@ -1,15 +1,19 @@
 const express = require('express')
+const session = require('express-session')
+const MongoStore = require('connect-mongo')
+const keys = require('./config/keys')
 const User = require('./models/User')
-
-const app = express()
-app.use(express.json())
-app.use(jsonErrHandler) // Handle bad request error
-app.use(express.urlencoded({ extended: true }))
 
 require('dotenv').config()
 
 // Setup MongoDB
 require('./services/mongoDb')
+
+const app = express()
+
+app.use(express.json())
+app.use(jsonErrHandler) // Handle bad request error
+app.use(express.urlencoded({ extended: true }))
 
 function jsonErrHandler(err, req, res, next) {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
@@ -18,6 +22,25 @@ function jsonErrHandler(err, req, res, next) {
   }
   next()
 }
+
+/**
+ * Session setup
+ */
+const sessionStore = new MongoStore({
+  mongoUrl: keys.MONGO_URI,
+  collection: 'sessions'
+})
+app.use(
+  session({
+    secret: keys.SESSIONS_SECRET,
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 // 1 day
+    }
+  })
+)
 
 app.get('/', (req, res) => {
   res.send('❤')
