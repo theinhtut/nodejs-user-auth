@@ -1,6 +1,7 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
 const User = mongoose.model('Users')
 
@@ -10,16 +11,31 @@ const customFields = {
 }
 
 const verifyCallback = (email, password, done) => {
-  console.log('I am in verifycallback')
   // Custom password verification implementation
-  const user = new User({
-    email: 'iamoverwriting@temp.com',
-    password: 'anythingAtTheMoment'
-  })
-  console.log('email: ' + email)
-
-  // done(null, false)
-  done(null, user)
+  User.findOne({ email: 'levi@aot.com' })
+    .then((user) => {
+      if (!user) {
+        return done(null, false)
+      }
+      // Check password valid
+      const hashedPw = user.password
+      bcrypt
+        .compare(password, hashedPw)
+        .then((result) => {
+          if (result) {
+            done(null, user)
+          } else {
+            done(null, false)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          done(err)
+        })
+    })
+    .catch((err) => {
+      done(err)
+    })
 }
 
 const strategy = new LocalStrategy(customFields, verifyCallback)
@@ -27,15 +43,16 @@ const strategy = new LocalStrategy(customFields, verifyCallback)
 passport.use(strategy)
 
 passport.serializeUser((user, done) => {
-  console.log('user in serializeFn: ' + user)
-  done(null, 112233)
+  done(null, user.id)
 })
 
-passport.deserializeUser((id, done) => {
-  console.log('id in deserializeUser: ' + id)
-  const user = new User({
-    email: 'deserializeUser@du.com',
-    password: 'anythingAtTheMoment'
-  })
-  done(null, user)
+passport.deserializeUser((userId, done) => {
+  console.log('id in deserializeUser: ' + userId)
+  User.findById(userId)
+    .then((user) => {
+      done(null, user)
+    })
+    .catch((err) => {
+      done(err)
+    })
 })

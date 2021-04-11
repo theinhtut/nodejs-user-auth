@@ -70,8 +70,6 @@ app.post('/api/user/register', async (req, res) => {
 
   // TODO: Refactor validation
   const { email, password } = req.body
-  console.log('email: ' + email)
-  console.log('password: ' + password)
   if (!email || !password) {
     console.log('email or password is empty')
     return res.status(400).send({
@@ -83,8 +81,6 @@ app.post('/api/user/register', async (req, res) => {
   try {
     const salt = await bcrypt.genSalt(11)
     const hashedPw = await bcrypt.hash(password, salt)
-    console.log('salt: ' + salt)
-    console.log('hashedPw: ' + hashedPw)
 
     const user = new User({
       email,
@@ -93,9 +89,10 @@ app.post('/api/user/register', async (req, res) => {
 
     user
       .save()
-      .then((u) => {
-        console.log(`Successfully saved user: ${u}`)
-        res.status(201).send(user)
+      .then(() => {
+        res.status(201).send({
+          msg: 'Successfully registered user'
+        })
       })
       .catch((err) => {
         console.log(err)
@@ -107,20 +104,17 @@ app.post('/api/user/register', async (req, res) => {
   }
 })
 
-app.post(
-  '/api/user/login',
-  passport.authenticate('local', { failureRedirect: '/' }),
-  (req, res) => {
-    console.log(req)
-    res.send(200)
-  }
-)
-
-app.post('/api/user/logout', (req) => {
-  req.logout()
+app.post('/api/user/login', passport.authenticate('local'), (req, res) => {
+  console.log(req.session)
+  res.sendStatus(200)
 })
 
-app.get('/api/user/protected-route', (req, res, next) => {
+app.post('/api/user/logout', (req, res) => {
+  req.logout()
+  res.sendStatus(200)
+})
+
+app.get('/api/user/protected-route', (req, res) => {
   const isAuth = req.isAuthenticated()
   if (isAuth) {
     res.status(200).send({
