@@ -47,7 +47,6 @@ module.exports = (app) => {
   })
 
   app.post('/api/user/login', passport.authenticate('local'), (req, res) => {
-    console.log(req.session)
     res.sendStatus(200)
   })
 
