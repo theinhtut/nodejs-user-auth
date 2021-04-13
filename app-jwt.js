@@ -30,16 +30,10 @@ app.use(jsonErrHandler) // Handle bad request error
 app.use(express.urlencoded({ extended: true }))
 
 /**
- * Session setup
- */
-// require('./services/sessions')(app)
-
-/**
  * Passport authentication setup
  */
 require('./services/passport-jwt')(passport)
 app.use(passport.initialize())
-// app.use(passport.session())
 
 /**
  * Routes

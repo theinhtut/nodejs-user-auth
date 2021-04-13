@@ -7,7 +7,7 @@ const User = mongoose.model('Users')
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: keys.JWT_PUBLIC_KEY,
+  secretOrKey: '123',
   algorithms: ['RS256'],
   jsonWebTokenOptions: {
     maxAge: '1d'

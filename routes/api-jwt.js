@@ -4,6 +4,29 @@ const bcrypt = require('bcrypt')
 const jwtAuth = require('../middlewares/jwtAuth').jwtAuth
 
 module.exports = (app) => {
+  const mwLogger = (req, res, next) => {
+    console.log('=== Printing from logger ===')
+    console.log(req.headers)
+    next()
+  }
+
+  const ppAuthorized = (req, res, next) => {
+    console.log('ppAuthorized')
+    passport.authenticate('jwt', { session: false }, function (err, token) {
+      next()
+      if (err) {
+        console.log('has error in middleware')
+        console.log(err)
+      }
+      console.log(`token: ${token}`)
+    })
+  }
+
+  app.get('/test', mwLogger, ppAuthorized, (req, res) => {
+    res.status(200).send({
+      msg: 'Testing from test route'
+    })
+  })
   app.get('/', (req, res) => {
     res.send('❤️')
   })

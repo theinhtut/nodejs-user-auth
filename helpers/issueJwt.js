@@ -10,12 +10,12 @@ module.exports = (user) => {
     iat: Date.now()
   }
 
-  const signedToken = jwt.sign(payload, JWT_PRIVATE_KEY, {
+  const signedToken = jwt.sign(payload, '123', {
     expiresIn: expiresIn
   })
 
   return {
-    aToken: `Bearer ${signedToken}`,
+    token: `Bearer ${signedToken}`,
     iat: payload.iat
   }
 }
