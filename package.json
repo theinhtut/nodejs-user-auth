@@ -1,12 +1,17 @@
 {
   "name": "nodejs-auth-session",
   "version": "1.0.0",
-  "description": "Simple session-based user authentication using NodeJS",
+  "description": "Simple sessions and JWT based user authentication using NodeJS",
   "keywords": [
     "nodejs",
+    "express",
     "javascript",
     "authentication",
-    "user-auth"
+    "user-auth",
+    "sessions",
+    "jwt",
+    "jsonwebtoken",
+    "mongodb"
   ],
   "author": "Thein Htut <theinhtut.dec@gmail.com>",
   "main": "app.js",
@@ -21,10 +26,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/theinhtut/nodejs-user-auth"
   },
   "bugs": {
-    "url": "/issues"
+    "url": "https://github.com/theinhtut/nodejs-user-auth/issues"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
