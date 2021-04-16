@@ -1,38 +1,11 @@
 const mongoose = require('mongoose')
 const passport = require('passport')
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const JWT_SECRET_KEY = require('../config/keys').JWT_SECRET_KEY
 const jwtAuth = require('../middlewares/jwtAuth').jwtAuth
+const verifyJwt = require('../middlewares/verifyJwt').verifyJwt
 
 module.exports = (app) => {
-  const verifyJwt = (req, res, next) => {
-    console.log('verifyJwt')
-    const headerAuth = req.headers.authorization || ''
-    // Check auth headers
-    if (!headerAuth) {
-      return res.status('400').send({ msg: 'Missing auth token' })
-    }
-
-    // Split into token parts and check
-    const tokenParts = headerAuth.split(' ')
-    const tokenType = tokenParts[0]
-    const aToken = tokenParts[1] || ''
-    if (tokenType !== 'Bearer' || aToken.match(/\S+\.\S+\.\S+/) === null) {
-      return res.status('401').send({ msg: 'You are now authorized' })
-    }
-
-    // Verify JWT
-    try {
-      const verifiedToken = jwt.verify(aToken, JWT_SECRET_KEY, { algorithms: ['HS256'] })
-      next()
-    } catch (err) {
-      console.log(err)
-      return res.status('401').send({ msg: 'You are now authorized' })
-    }
-  }
-
-  app.get('/test', verifyJwt, (req, res) => {
+  app.get('/api/user/custom-protected-route', verifyJwt, (req, res) => {
     res.status(200).send({
       msg: 'Testing from test route'
     })
