@@ -1,28 +1,38 @@
 const mongoose = require('mongoose')
 const passport = require('passport')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const JWT_SECRET_KEY = require('../config/keys').JWT_SECRET_KEY
 const jwtAuth = require('../middlewares/jwtAuth').jwtAuth
 
 module.exports = (app) => {
-  const mwLogger = (req, res, next) => {
-    console.log('=== Printing from logger ===')
-    console.log(req.headers)
-    next()
-  }
+  const verifyJwt = (req, res, next) => {
+    console.log('verifyJwt')
+    const headerAuth = req.headers.authorization || ''
+    // Check auth headers
+    if (!headerAuth) {
+      return res.status('400').send({ msg: 'Missing auth token' })
+    }
 
-  const ppAuthorized = (req, res, next) => {
-    console.log('ppAuthorized')
-    passport.authenticate('jwt', { session: false }, function (err, token) {
+    // Split into token parts and check
+    const tokenParts = headerAuth.split(' ')
+    const tokenType = tokenParts[0]
+    const aToken = tokenParts[1] || ''
+    if (tokenType !== 'Bearer' || aToken.match(/\S+\.\S+\.\S+/) === null) {
+      return res.status('401').send({ msg: 'You are now authorized' })
+    }
+
+    // Verify JWT
+    try {
+      const verifiedToken = jwt.verify(aToken, JWT_SECRET_KEY, { algorithms: ['HS256'] })
       next()
-      if (err) {
-        console.log('has error in middleware')
-        console.log(err)
-      }
-      console.log(`token: ${token}`)
-    })
+    } catch (err) {
+      console.log(err)
+      return res.status('401').send({ msg: 'You are now authorized' })
+    }
   }
 
-  app.get('/test', mwLogger, ppAuthorized, (req, res) => {
+  app.get('/test', verifyJwt, (req, res) => {
     res.status(200).send({
       msg: 'Testing from test route'
     })
