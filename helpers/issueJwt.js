@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const JWT_PRIVATE_KEY = require('../config/keys').JWT_PRIVATE_KEY
+const JWT_SECRET_KEY = require('../config/keys').JWT_SECRET_KEY
 
 module.exports = (user) => {
   const id = user._id
@@ -10,7 +10,7 @@ module.exports = (user) => {
     iat: Date.now()
   }
 
-  const signedToken = jwt.sign(payload, '123', {
+  const signedToken = jwt.sign(payload, JWT_SECRET_KEY, {
     expiresIn: expiresIn
   })
 
