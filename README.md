@@ -18,15 +18,14 @@ NodeJS user auth app with sessions and JWT based authentication using Express, P
 
 - **Add environment variables in `dev.js`**
 
-  Create the development environment variables file under `config/dev.js` as following:
+  Create the development environment variables file `.env.development` as following in `.env.example`:
 
-  ```js
-  // Add your custom environment variables by replacing `INSERT_YOUR_SECRET`
-  module.exports = {
-    MONGO_URI: 'INSERT_YOUR_SECRET',
-    SESSIONS_SECRET: 'INSERT_YOUR_SECRET',
-    JWT_SECRET_KEY: 'INSERT_YOUR_SECRET'
-  }
+  ```
+  NODE_ENV=
+  MONGO_URI=
+  SESSIONS_SECRET=
+  JWT_SECRET_KEY=
+  ...
   ```
 
 - **Run the development server**

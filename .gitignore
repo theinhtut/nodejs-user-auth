@@ -1,5 +1,7 @@
 node_modules
 .env
+.env.development
+.env.production
 config/dev.js
 
 # Logs and databases #
