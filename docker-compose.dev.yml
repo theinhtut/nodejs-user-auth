@@ -1,0 +1,13 @@
+version: '3'
+services:
+  auth-jwt:
+    build:
+      context: .
+      args:
+        NODE_ENV: development
+    volumes:
+      - ./:/app:ro
+      - /app/node_modules
+    env_file:
+      - ./.env.development
+    command: npm run dev:jwt

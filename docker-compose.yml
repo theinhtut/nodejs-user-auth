@@ -1,0 +1,6 @@
+version: '3'
+services:
+  auth-jwt:
+    build: .
+    port:
+      - '3000:3000'
