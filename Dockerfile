@@ -1,6 +1,6 @@
-FROM node:12.16.2
+FROM node:12.16.2-alpine
 WORKDIR /app
-COPY package.json package-lock.json .
+COPY package.json package-lock.json ./
 # RUN npm ci --only=production
 ARG NODE_ENV
 RUN if [ "$NODE_ENV" = "production" ]; \

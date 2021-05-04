@@ -2,5 +2,5 @@ version: '3'
 services:
   auth-jwt:
     build: .
-    port:
+    ports:
       - '3000:3000'
