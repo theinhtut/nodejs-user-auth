@@ -79,3 +79,45 @@ A top-level view of files and directories of the application's folder structure.
     ├── package-lock.json
     ├── package.json
     └── README.md
+
+## 🐳 Using with Docker
+
+#### Running the containers
+
+```shell
+# For development
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+
+# For production
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+#### Stopping the containers
+
+```shell
+# For development
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
+
+# For production
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+```
+
+#### Environment variables
+
+Environment variables for `MONGO_URI` will be slightly differnt for running the web-app with and without using docker.
+
+It is recommended to use MongoDB IP address as `mongo` inside the docker container.
+
+_Using docker_
+
+```
+MONGO_URI=mongodb://mongo:27017/your-db-name
+...
+```
+
+_Without docker_
+
+```
+MONGO_URI=mongodb://X.X.X.X:27017/your-db-name
+...
+```
